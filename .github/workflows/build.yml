@@ -16,17 +16,17 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          ~/Library/Caches/CocoaPods
-          Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          ~/Library/Caches
+        key: ${{ runner.os }}-build-${{ github.sha }}
         restore-keys: |
-          ${{ runner.os }}-pods-
+          ${{ runner.os }}-build-
 
     - name: Install Dependencies & Setup Developer Profile
       run: |
         chmod +x ./get_frameworks.sh
         chmod +x ./get_resources.sh
-        # Genera automaticamente il file developer_setup.xcconfig mancante
+        
+        # Crea il file xcconfig richiesto se non esiste
         if [ -f "./configure.sh" ]; then
           chmod +x ./configure.sh
           ./configure.sh
@@ -37,14 +37,13 @@ jobs:
           echo 'DEVELOPMENT_TEAM = ""' > developer_setup.xcconfig
           echo 'PRODUCT_BUNDLE_IDENTIFIER = "com.blinksh.blink.custom"' >> developer_setup.xcconfig
         fi
+        
         ./get_frameworks.sh
         ./get_resources.sh
-        # Installa i moduli CocoaPods necessari al progetto Xcode
-        pod install
 
     - name: Build App
       run: |
-        xcodebuild -workspace Blink.xcworkspace -scheme Blink -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO OBJROOT=$PWD/build SYMROOT=$PWD/build
+        xcodebuild -project Blink.xcodeproj -scheme Blink -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO OBJROOT=$PWD/build SYMROOT=$PWD/build
 
     - name: Package IPA
       run: |
