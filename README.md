@@ -124,5 +124,6 @@ Our UI is very straightforward and optimizes the experience on touch devices for
 - [Mosh](https://mosh.org) was written by Keith Winstein, along with Anders Kaseorg, Quentin Smith, Richard Tibbetts, Keegan McAllister, and John Hood.
 - This product includes software developed by the OpenSSL Project
 for use in the OpenSSL Toolkit. (https://www.openssl.org/).
+<!--build trigger -->
 - [Libssh2](https://www.libssh2.org)
 - Entypo pictograms by Bruce Daniel www.entypo.com.
