@@ -12,9 +12,6 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Set up Xcode version
-      run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
-
     - name: Restore Cache
       uses: actions/cache@v4
       with:
@@ -27,12 +24,14 @@ jobs:
 
     - name: Install Dependencies
       run: |
+        chmod +x ./get_frameworks.sh
+        chmod +x ./get_resources.sh
         ./get_frameworks.sh
         ./get_resources.sh
 
     - name: Build App
       run: |
-        xcodebuild -project Blink.xcodeproj -scheme Blink -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO OBJROOT=$PWD/build SYMROOT=$PWD/build
+        xcodebuild -project Blink.xcodeproj -scheme Blink -sdk iphoneos -configuration Release CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO OBJROOT=$PWD/build SYMROOT=$PWD/build
 
     - name: Package IPA
       run: |
